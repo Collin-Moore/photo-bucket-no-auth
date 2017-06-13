@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-inverse">
   <div class="container">
     <h1>
@@ -8,19 +7,34 @@
 </nav>
 <div class="container">
   <div class="well well-lg">
-    <form >
+    <form (ngSubmit)="onSubmit()" #photoForm="ngForm">
       <div class="form-group">
-        <input required type="text" class="form-control" placeholder="Image URL" name="quote" >
+        <input required type="text" class="form-control" placeholder="Image URL" name="url" [(ngModel)]="formPhoto.url">
       </div>
       <div class="form-group">
-        <input required type="text" class="form-control" placeholder="Caption" name="movie" >
+        <input required type="text" class="form-control" placeholder="Caption" name="name" [(ngModel)]="formPhoto.name">
       </div>
-      <button type="submit" class="btn btn-default pull-right">Submit</button>
+      <button [disabled]="!photoForm.form.valid" type="submit" class="btn btn-default pull-right">{{formPhoto.$key ? 'Edit' : 'Submit'}}</button>
       <div class="clearfix"></div>
     </form>
   </div>
 </div>
 <hr>
-
-
-
+<div class="container">
+  <div id="wrapper">
+    <div id="columns">
+      <div class="pin" *ngFor="let photo of (photoStream | async) | reverse">
+        <div class="pull-right edit-actions">
+          <button type="button" class="btn btn-success btn-xs" (click)="edit(photo)">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+          <button type="button" class="btn btn-danger btn-xs" (click)="remove(photo.$key)">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+        </div>
+        <img [src]="photo.url" alt="A photo">
+        <p class="caption">{{ photo.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>
